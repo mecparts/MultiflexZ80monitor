@@ -1169,7 +1169,7 @@ GENERAÌ MOTHERBOAÒÄ CHANGES
      2®  Inserô thå followinç connections:
          ª ÛU18.1µ anä U23.5]
            [U18.²  anä U23.6]
-           [U18.´  anä U26.1]
+           [U23.´  anä U26.1]
 
 Thå  abovå changeó allo÷ thå datá froí outpuô (PGD©  tï 
 bå enableä ontï thå EPROM'ó datá lines¬ wheneveò bitó ´ 

@@ -1379,7 +1379,7 @@
              2.  Insert the following connections:
                  * [U18.15 and U23.5]
                    [U18.2  and U23.6]
-                   [U18.4  and U26.1]
+                   [U23.4  and U26.1]
 
         The  above changes allow the data from output (PGD)  to 
         be enabled onto the EPROM's data lines, whenever bits 4 
