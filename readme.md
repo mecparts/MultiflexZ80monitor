@@ -21,3 +21,10 @@ And on the off chance that there's one other person out there who has a
 Multiflex Z80A Computer Kit but has lost their manual, I also
 transcribed the section of the manual that documented the monitor's
 commands.
+
+A quick and dirty Python utility is included that mimics the audio
+format used for cassette recordings. This can be used to convert a
+binary file into a WAVe file that can be played through the cassette
+input on the trainer board. Hook the remote computer's speaker output to
+the cassette input, calibrate the input level, press LD on the trainer
+and start playing the WAVe file.
