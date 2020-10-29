@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8-*-
 #
 # cassette.py:  a Q&D Python routine to generate a WAV file
@@ -25,7 +25,7 @@
 #               -checksum of preceding bytes
 #               2 bytes of 0x00s
 #
-#       Usage:  cassette.py binary_file [wav_file] [addr]
+#       Usage:  cassette.py hex_file [wav_file]
 #
 import sys
 import numpy
@@ -34,6 +34,7 @@ from pygame.sndarray import make_sound
 from pygame import mixer
 import wave
 from time import sleep
+from intelhex import IntelHex
 
 SAMPLERATE = 32000      # 32KHz: 16 samples per 2KHz full wave, 
                         #        16 samples per 1KHz half wave
@@ -89,17 +90,17 @@ def send_byte(byte):
     num_bytes += 1
     return byte
 
-def cass_save(data,addr):
+def cass_save(data):
     for n in range(PREAMBLE_BYTES):
         send_byte(0)                                    # preamble
     checksum = 0
     checksum += send_byte(1)                            # sync byte
-    checksum += send_byte(addr & 0xFF)                  # address LSB
-    checksum += send_byte((addr >> 8) & 0xFF)           # address MSB
+    checksum += send_byte(data.minaddr() & 0xFF)        # address LSB
+    checksum += send_byte((data.minaddr() >> 8) & 0xFF) # address MSB
     checksum += send_byte(len(data) & 0xFF)             # length LSB
     checksum += send_byte((len(data) >> 8) & 0xFF)      # length MSB
     for n in range(len(data)):
-        checksum += send_byte(ord(data[n]))             # data
+        checksum += send_byte(data[data.minaddr()+n])   # data
     send_byte(-checksum & 0xFF)                         # checksum
     send_byte(0)
     send_byte(0)
@@ -116,25 +117,15 @@ def calibrate():
     return x_arr
     
 if len(sys.argv) >= 2:
-    binfile = sys.argv[1]
-    if len(sys.argv) >= 3:
-       wavfile = sys.argv[2]
-    else:
-       wavfile = "."
-    if len(sys.argv) == 4:
-       addr = int(sys.argv[3],0)
-    else:
-       addr = 0x0800
-    with open(binfile,mode='rb') as file:
-        data = file.read()
-    snd = cass_save(data,addr)
-    if (len(sys.argv) == 2) or (wavfile == "."):
+    ih = IntelHex(sys.argv[1])
+    snd = cass_save(ih)
+    if len(sys.argv) == 2:
         # play right away
         make_sound(snd).play()
         sleep(num_bytes/250)
     else:
         # save as WAV file
-        sfile = wave.open(wavfile,"w")
+        sfile = wave.open(sys.argv[2],"w")
         sfile.setnchannels(1)
         sfile.setsampwidth(2)  # 2 bytes
         sfile.setframerate(SAMPLERATE)
