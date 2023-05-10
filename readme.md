@@ -28,3 +28,6 @@ Intel hex file into a WAVe file that can be played through the cassette
 input on the trainer board. Hook the remote computer's speaker output to
 the cassette input, calibrate the input level, press LD on the trainer
 and start playing the WAVe file.
+
+Two bugs in the original source have been fixed: one in the 2716 EPROM
+programming routine, and another in the 2708 EPROM programming routine.
